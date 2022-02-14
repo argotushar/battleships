@@ -1,0 +1,26 @@
+name: "Delete corresponding App on branch delete"
+
+on:
+  delete:
+  workflow_dispatch:
+
+jobs:
+  delete:
+    environment:
+      name: preprod
+
+    runs-on: ubuntu-latest
+    name: Deleting App
+    steps:
+      - name: Fetch repo and branch
+        uses: actions/checkout@v2
+      - name: Fetch Branch
+        run: echo "Clean up for the branch ${{ github.event.ref }}"
+      - name: Download art
+        run: curl --silent https://github.com/argonautdev/public/releases/latest/download/art-linux -L -o art
+      - name: Configure art
+        run: |
+          chmod +x ./art
+          sudo mv ./art /usr/local/bin/art
+          art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
+          art app delete -f .art/argonaut-preprod-bs-tushar.yaml --set appName="bs-tushar-${{ github.event.ref }}"
