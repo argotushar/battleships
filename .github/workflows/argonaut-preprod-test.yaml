@@ -1,0 +1,84 @@
+
+name: "Build and Push to CR"
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
+  workflow_dispatch:
+
+jobs:
+  build:
+    
+    environment: 
+      name: preprod 
+    
+    runs-on: ubuntu-latest
+    name: Build and Push Img
+    steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Fetch repo
+        uses: actions/checkout@v2
+      - name: Get Short SHA
+        id: get_sha
+        run: echo ::set-output name=SHA_SHORT::$(git rev-parse --short HEAD)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build Image
+        uses: docker/build-push-action@v2
+        id: build
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test:${{ steps.get_sha.outputs.SHA_SHORT }}
+          
+          outputs: type=docker,dest=image.tar
+
+      - name: Push to ecr
+        uses: argonautdev/aws-ecr-action@v4.1
+        id: push_to_ecr
+        with:
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          repo: argonaut/test
+          region: us-east-2
+          tags: ${{ steps.get_sha.outputs.SHA_SHORT }}
+          create_repo: true
+          image_scanning_configuration: true
+          docker_image_path: image.tar
+
+  deploy:
+    
+    environment: 
+      name: preprod 
+    
+    runs-on: ubuntu-latest
+    name: Deploy to Argonaut
+    needs: build
+    steps:
+      - name: Fetch repo
+        uses: actions/checkout@v2
+      - name: Fetch branch name
+        shell: bash
+        run: echo ::set-output name=BRANCH_NAME::${GITHUB_REF#refs/heads/}
+        id: get_branch_name
+      - name: Get Short SHA
+        id: get_sha
+        run: echo ::set-output name=SHA_SHORT::$(git rev-parse --short HEAD)
+      - name: Download art
+        run: curl --silent https://github.com/argonautdev/public/releases/latest/download/art-linux -L -o art
+      - name: Configure art
+        run: |
+          chmod +x ./art
+          sudo mv ./art /usr/local/bin/art
+          art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
+          art app deploy -f .art/argonaut-preprod-test.yaml --set image="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test" --set 'labels.argonaut\.dev/git-provider'='github' --set  argonaut.git-provider='github' --set  imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}"  --set appName="test"  --set argonaut.env="preprod"  --set argonaut.region="us-east-2"  --set argonaut.cluster="preprod"  --set argonaut.serviceType="stateless"  --set argonaut.imageRegistry="ecr" 
+
