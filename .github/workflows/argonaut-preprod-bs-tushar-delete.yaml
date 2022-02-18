@@ -23,4 +23,4 @@ jobs:
           chmod +x ./art
           sudo mv ./art /usr/local/bin/art
           art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
-          art app delete -f .art/argonaut-preprod-bs-tushar.yaml --set appName=${{ (github.ref == format('refs/heads/{0}', github.event.repository.default_branch)) && "bs-tushar" || format('{0}-{1}', "bs-tushar", github.event.ref) }}
+          art app delete -f .art/argonaut-preprod-bs-tushar.yaml --set appName=${{ (github.ref == format('refs/heads/{0}', github.event.repository.default_branch)) && 'bs-tushar' || format('{0}-{1}', 'bs-tushar', github.event.ref) }}
