@@ -29,4 +29,4 @@ jobs:
           chmod +x ./art
           sudo mv ./art /usr/local/bin/art
           art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
-          art app delete -f .art/argonaut-preprod-inmain-bp.yaml --set appName=${{ (steps.get_branch_name.outputs.BRANCH_NAME == github.event.repository.default_branch)) && 'inmain-bp' || format('{0}-{1}', 'inmain-bp', steps.get_branch_name.outputs.BRANCH_NAME) }}
+          art app delete -f .art/argonaut-preprod-inmain-bp.yaml --set appName=${{ (steps.get_branch_name.outputs.BRANCH_NAME == github.event.repository.default_branch) && 'inmain-bp' || format('{0}-{1}', 'inmain-bp', steps.get_branch_name.outputs.BRANCH_NAME) }}
