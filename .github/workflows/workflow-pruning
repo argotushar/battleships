@@ -3,8 +3,7 @@
 name: Workflow Run Pruner
 
 on:
-  schedule:
-  - cron: '0 0 * * *'  # GMT
+  push:
   workflow_dispatch:
 
 jobs:
@@ -48,7 +47,7 @@ jobs:
       with:
         github-token: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
         script: |
-          const days_to_expiration = 30;
+          const days_to_expiration = 2;
           const ms_in_day = 86400000;
           const now = Date.now();
           const pages = 5;
