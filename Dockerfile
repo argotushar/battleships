@@ -11,7 +11,7 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 # RUN --mount=type=secret,id=MY_SECRET_FILE,dst=/etc/secrets/.env cat /etc/secrets/.env
 RUN --mount=type=secret,id=MY_SECRET_FILE ab=`cat /run/secrets/MY_SECRET_FILE`
-ECHO ${#ab}
+RUN echo ${#ab}
 RUN --mount=type=secret,id=MY_GITHUB_SECRET_FILE cat /run/secrets/MY_GITHUB_SECRET_FILE
 
 RUN npm install --production
