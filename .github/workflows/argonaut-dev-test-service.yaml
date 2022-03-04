@@ -41,7 +41,6 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Store Secrets 
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
@@ -51,10 +50,8 @@ jobs:
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
           secret-files: |
-            "MY_SECRET_FILE=${{ steps.secret-file1.outputs.SECRET_FILE }}"
+            MY_SECRET_FILE=${{ steps.secret-file1.outputs.SECRET_FILE }}
           outputs: type=docker,dest=image.tar
-      - name: Get Short SHA
-        run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}"
       - name: Push to ecr
         uses: argonautdev/aws-ecr-action@v4.1
         id: push_to_ecr
