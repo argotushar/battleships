@@ -38,7 +38,8 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
-          
+          secret-files: |
+            "MY_SECRET=./github-secrets.txt"
           outputs: type=docker,dest=image.tar
 
       - name: Push to ecr
