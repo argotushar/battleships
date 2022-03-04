@@ -29,6 +29,8 @@ jobs:
           Write-Output "::set-output name=SECRET_FILE_HASH::$($secretFileHash.Hash)";
           Write-Output "Secret file $secretFile has hash $($secretFileHash.Hash)";
         shell: pwsh
+      - name: Checck the file
+        run: echo ${{ steps.secret-file1.outputs.SECRET_FILE }}
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
