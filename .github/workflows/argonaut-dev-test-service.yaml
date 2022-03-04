@@ -34,7 +34,7 @@ jobs:
         run: |
           for f in ${{ secrets }}; do
             echo "keyval=> "$f
-            echo $f > /tmp/mysecretfile"
+            echo $f > /tmp/mysecretfile
           done
       - name: Build Image
         uses: docker/build-push-action@v2
