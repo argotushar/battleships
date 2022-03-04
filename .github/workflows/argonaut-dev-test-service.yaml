@@ -33,7 +33,6 @@ jobs:
       - name: Store Secrets    
         run: |
           echo ${{ secrets.AWS_ACCOUNT_ID }} > /tmp/mysecretfile
-          rsync $FROM user@server:
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
