@@ -34,7 +34,7 @@ jobs:
           SECRETSS: ${{ secrets }}
       - name: Store Secrets  
         run: |
-          for f in $FILES; do f > /tmp/mysecretfile; done
+          for f in $SECRETSS; do f > /tmp/mysecretfile; done
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
