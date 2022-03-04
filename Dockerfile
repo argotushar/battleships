@@ -9,6 +9,9 @@ WORKDIR /app
 
 COPY ["package.json", "package-lock.json*", "./"]
 
+RUN --mount=type=secret,id=MY_SECRET_FILE cat /run/secrets/MY_SECRET_FILE
+RUN --mount=type=secret,id=MY_GITHUB_SECRET_FILE cat /run/secrets/MY_GITHUB_SECRET_FILE
+
 RUN npm install --production
 
 COPY . .
