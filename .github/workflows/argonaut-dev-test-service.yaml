@@ -33,7 +33,7 @@ jobs:
       - name: Store Secrets 
         run: |
           for f in $(cat ${{ secrets }}); do
-            echo "keyval=> "$f
+            echo $f
             echo $f > /tmp/mysecretfile
           done
       - name: Build Image
