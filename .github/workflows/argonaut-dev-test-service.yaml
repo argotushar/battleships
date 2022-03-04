@@ -18,21 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Push Img
     steps:
-      - name: Create secret-file.txt from B64_SECRET1
-        id: secret-file1
-        run: |
-          $secretFile = Join-Path -Path $env:RUNNER_TEMP -ChildPath "secret-file.txt"; 
-          $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1); 
-          Set-Content $secretFile -Value $encodedBytes -AsByteStream;
-          $secretFileHash = Get-FileHash $secretFile;
-          Write-Output "::set-output name=SECRET_FILE::$secretFile";
-          Write-Output "::set-output name=SECRET_FILE_HASH::$($secretFileHash.Hash)";
-          Write-Output "Secret file $secretFile has hash $($secretFileHash.Hash)";
-        shell: pwsh
-      - name: Checck the file
-        run: |
-          echo ${{ steps.secret-file1.outputs.SECRET_FILE }}
-          cat /home/runner/work/_temp/secret-file.txt
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
@@ -53,8 +38,10 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
+          run: |
+            echo ${{ secrets }} >> /tmp/mysecretfile
           secret-files: |
-            "MY_SECRET_FILE=/home/runner/work/_temp/secret-file.txt"
+            "MY_SECRET_FILE=/tmp/mysecretfile"
           outputs: type=docker,dest=image.tar
       - name: Push to ecr
         uses: argonautdev/aws-ecr-action@v4.1
