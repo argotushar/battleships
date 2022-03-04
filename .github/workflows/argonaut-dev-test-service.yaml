@@ -41,7 +41,7 @@ jobs:
           secret-files: |
             MY_SECRET=./github-secrets.txt
           outputs: type=docker,dest=image.tar
-        run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}  ${{ MY_SECRET }}"
+          run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}  ${{ MY_SECRET }}"
       - name: Get Short SHA
         run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}"
       - name: Push to ecr
