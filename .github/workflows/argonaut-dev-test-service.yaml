@@ -30,11 +30,11 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        env:
+          SECRETSS: ${{ secrets }}
       - name: Store Secrets  
         run: |
-          {{- range secrets }}
-          - echo {{ . }} > /tmp/mysecretfile
-          {{- end }}
+          for f in $FILES; do f > /tmp/mysecretfile; done
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
