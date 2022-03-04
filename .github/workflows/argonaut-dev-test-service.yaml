@@ -39,9 +39,9 @@ jobs:
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
           secret-files: |
-            MY_SECRET=./github-secrets.txt
+            "MY_SECRET=./github-secrets.txt"
           outputs: type=docker,dest=image.tar
-          run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}  ${{ MY_SECRET }}"
+          run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}"
       - name: Get Short SHA
         run: echo "OMG Secrets are ${{ secrets.MY_SECRET }}"
       - name: Push to ecr
