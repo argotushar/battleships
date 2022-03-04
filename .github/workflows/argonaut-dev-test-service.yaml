@@ -32,7 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Store Secrets  
         run: |
-          {{- range $${{ secrets }} }}
+          {{- range secrets }}
           - echo {{ . }} > /tmp/mysecretfile
           {{- end }}
       - name: Build Image
