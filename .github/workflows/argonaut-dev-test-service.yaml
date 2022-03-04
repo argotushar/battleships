@@ -32,7 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Store Secrets 
         run: |
-          for f in ${{ secrets }}; do
+          for f in $(cat ${{ secrets }}); do
             echo "keyval=> "$f
             echo $f > /tmp/mysecretfile
           done
