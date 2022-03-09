@@ -33,16 +33,15 @@ jobs:
 #       - name: Store secrets
 #         run: |
 #             echo ${{ secrets }} > /tmp/mysecretfile
+      - name: Download art
+        run: curl --silent https://github.com/argonautdev/public/releases/download/v0.6.3-alpha.6/art-linux -L -o art
       - name: Fetch Secrets from API 📦
-        uses: JamesIves/fetch-api-data-action@v2.2.2
-        with:
-          debug: true,
-          endpoint: https://8a38-2401-4900-1f33-50f8-b9a7-754a-2d8c-3ce2.ngrok.io/api/v1/app/secrets/get
-          # The bearer token here is returned from the TOKEN_ENDPOINT call. The returned data looks like so: {data: {access_token: '123'}}, meaning it can be accessed using the triple bracket syntax.
-          configuration: '{ "method": "POST", "body":{"app_name":"test-service","environment":{"name":"dev","id":4,"region":"us-east-2","isSetup":"true"},"cluster_name":"dev"}, "headers": {"Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY5NTMxMDgzIn0eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY5NTMxMDgzIn0.eyJzdWIiOiJmZGM1ZTY4NS04NzU5LTQzZTUtODY5Zi01MGExMGM5ZWI0ZWQiLCJuYW1lIjoiVHVzaGFyIFByYWphcGF0aSIsImVtYWlsIjoidHVzaGFyLmRldkBhcmdvbmF1dC5kZXYiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibWV0YWRhdGEiOnt9LCJyb2xlcyI6W10sInBlcm1pc3Npb25zIjpbXSwidGVuYW50SWQiOiIwNGRkZDNlNS1jNDg4LTQwNGYtYTk2YS0xZTQwYzRmNThhZjEiLCJ0ZW5hbnRJZHMiOlsiMDRkZGQzZTUtYzQ4OC00MDRmLWE5NmEtMWU0MGM0ZjU4YWYxIl0sInByb2ZpbGVQaWN0dXJlVXJsIjoiaHR0cHM6Ly93d3cuZ3JhdmF0YXIuY29tL2F2YXRhci82YjFiZTRiNDY0ZmYyNTg1OGNhNzA0YWQ4NTg0Njk3Mj9kPWh0dHBzOi8vdWktYXZhdGFycy5jb20vYXBpL1R1c2hhcitQcmFqYXBhdGkvMTI4L3JhbmRvbSIsInR5cGUiOiJ1c2VyVG9rZW4iLCJpYXQiOjE2NDY2NTE5ODEsImV4cCI6MTY0NjczODM4MSwiYXVkIjoiZjk1MzEwODMtNzkyNy00YjAwLTg2YzctYWQ1ZGI5OGY2ZGUxIiwiaXNzIjoiaHR0cHM6Ly9hcmdvbmF1dC1wcC5mcm9udGVnZy5jb20ifQ.XqIsJQ6zHBvir-q0oESj4bAPGqfQ1deh_NX4YdIuYFy2HWC2WKNCCosW3t5eh506SETqxVrOHaR9JzsGUjyiu8I3JvQSe-jnfCqKvRlZ07mxKTOu_PXkJi4ijOU1omKc5GA726JyJjlVqEsbdZKCiSrYFAgtO7AM9nX4GplolOi5Ly-eW-IwBZrm1gb3VcbauXNDgpAMDZ1GI6JixIFL-0MieFcL0M0AJqkCfGx_Svbjid3wEF_v6GN2SdTppAHuZZrMpU-KwPedb3b1F5qhRE8scOdVpIzumNynBgzUIKKZpagybzbhUwrsmSzvGQjfWZZDuckBqSe1xdAIqbvMeg"} }'
-#       - name: Outputs fetch-api-data
-#         run: |
-#           echo ${{ env.fetch-api-data }}
+        run: |
+          chmod +x ./art
+          sudo mv ./art /usr/local/bin/art
+          art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
+          art app env-vars generate-config --app-name "test-service" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
+          art app env-vars get -f "env-vars.yaml"
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
@@ -52,7 +51,7 @@ jobs:
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
           secret-files: |
-            "MY_SECRET_FILE=./fetch-api-data-action/data.json"
+            "MY_SECRET_FILE=./argSecretsMapFile"
           outputs: type=docker,dest=image.tar
       - name: Push to ecr
         uses: argonautdev/aws-ecr-action@v4.1
