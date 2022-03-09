@@ -34,7 +34,7 @@ jobs:
 #         run: |
 #             echo ${{ secrets }} > /tmp/mysecretfile
       - name: Download art
-        run: curl --silent https://github.com/argonautdev/public/releases/download/v0.6.3-alpha.7/art-linux -L -o art
+        run: curl --silent https://github.com/argonautdev/public/releases/download/v0.6.3-alpha.8/art-linux -L -o art
       - name: Fetch Secrets from API 📦
         run: |
           chmod +x ./art
