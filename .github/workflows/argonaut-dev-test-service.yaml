@@ -34,7 +34,7 @@ jobs:
 #         run: |
 #             echo ${{ secrets }} > /tmp/mysecretfile
       - name: Download art
-        run: curl --silent https://github.com/argonautdev/public/releases/download/v0.6.3-alpha.6/art-linux -L -o art
+        run: curl --silent https://github.com/argonautdev/public/releases/download/v0.6.3-alpha.7/art-linux -L -o art
       - name: Fetch Secrets from API 📦
         run: |
           chmod +x ./art
@@ -42,7 +42,9 @@ jobs:
           art configure --key 6f069312-f516-4a2f-b73f-45f7d2935266 --secret 86401c8d-e41a-4660-a2f2-dfcf00e3e98d
           art app env-vars generate-config --app-name "test-service" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
           art app env-vars get -f "env-vars.yaml"
+          echo "1-----------"
           cat ./argSecretsMapFile
+          echo "2-----------"
           cat /argSecretsMapFile
       - name: Build Image
         uses: docker/build-push-action@v2
