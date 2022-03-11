@@ -42,10 +42,10 @@ jobs:
           art configure --key 6f069312-f516-4a2f-b73f-45f7d2935266 --secret 86401c8d-e41a-4660-a2f2-dfcf00e3e98d
           art app env-vars generate-config --app-name "test-service" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
           art app env-vars get -f "env-vars.yaml"
-#          echo "1-----------"
- #         cat ./argSecretsMapFile
-  #        echo "2-----------"
-   #       cat /argSecretsMapFile
+          echo "1-----------"
+          cat ./argSecretsMapFile
+          echo "2-----------"
+          cat /argSecretsMapFile
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
@@ -55,7 +55,7 @@ jobs:
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test-service:${{ steps.get_sha.outputs.SHA_SHORT }}
           secret-files: |
-            "MY_SECRET_FILE=/argSecretsMapFile"
+            "MY_SECRET_FILE=./argSecretsMapFile"
           outputs: type=docker,dest=image.tar
       - name: Push to ecr
         uses: argonautdev/aws-ecr-action@v4.1
