@@ -37,7 +37,7 @@ jobs:
           chmod +x ./art
           sudo mv ./art /usr/local/bin/art
           art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
-          art app env-vars generate-config --app-name bs-tushar --cluster-name dev --environment-name dev --environment-region us-east-2 --type "buildtime"
+          art app env-vars generate-config --app-name "bs-tushar" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
           art app env-vars get -f "env-vars.yaml"
       - name: Build Image
         uses: docker/build-push-action@v2
