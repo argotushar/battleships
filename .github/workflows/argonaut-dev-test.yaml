@@ -69,7 +69,7 @@ jobs:
   deploy:
     env:
       ART_FRONTEGG_SERVER: argonaut-pp.frontegg.com
-      ART_MIDGARD_SERVER: 4202-2401-4900-1f32-663d-542d-ec7c-c89d-ac2f.ngrok.io 
+      ART_MIDGARD_SERVER: 99b8-2401-4900-1f32-663d-542d-ec7c-c89d-ac2f.ngrok.io 
     environment: 
       name: dev 
     
