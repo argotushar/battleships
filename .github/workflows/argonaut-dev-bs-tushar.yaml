@@ -30,15 +30,15 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Download art
-        run: curl --silent https://github.com/argonautdev/public/releases/latest/download/art-linux -L -o art
-      - name: Fetch BuildTime Secrets
-        run: |
-          chmod +x ./art
-          sudo mv ./art /usr/local/bin/art
-          art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
-          art app env-vars generate-config --app-name "bs-tushar" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
-          art app env-vars get -f "env-vars.yaml"
+#       - name: Download art
+#         run: curl --silent https://github.com/argonautdev/public/releases/latest/download/art-linux -L -o art
+#       - name: Fetch BuildTime Secrets
+#         run: |
+#           chmod +x ./art
+#           sudo mv ./art /usr/local/bin/art
+#           art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
+#           art app env-vars generate-config --app-name "bs-tushar" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
+#           art app env-vars get -f "env-vars.yaml"
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
@@ -48,8 +48,8 @@ jobs:
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/bs-tushar:${{ steps.get_sha.outputs.SHA_SHORT }}
           
-          secret-files: |
-            "MY_SECRET_FILE=./argSecretsMapFile"
+#           secret-files: |
+#             "MY_SECRET_FILE=./argSecretsMapFile"
           outputs: type=docker,dest=image.tar
 
       - name: Push to ecr
