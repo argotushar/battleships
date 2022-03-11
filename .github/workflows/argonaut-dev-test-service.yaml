@@ -44,8 +44,8 @@ jobs:
           art app env-vars get -f "env-vars.yaml"
           echo "1-----------"
           cat ./argSecretsMapFile
-          echo "2-----------"
-          cat /argSecretsMapFile
+          echo ./argSecretsMapFile > /tmp/argSecretsMapFile
+          echo /tmp/argSecretsMapFile
       - name: Build Image
         uses: docker/build-push-action@v2
         id: build
