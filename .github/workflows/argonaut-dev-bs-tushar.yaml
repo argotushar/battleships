@@ -67,7 +67,10 @@ jobs:
           docker_image_path: image.tar
 
   deploy:
-    
+    env:
+      ART_FRONTEGG_SERVER: argonaut-pp.frontegg.com
+      ART_MIDGARD_SERVER: midgard.pp.argonaut.live
+
     environment: 
       name: dev 
     
