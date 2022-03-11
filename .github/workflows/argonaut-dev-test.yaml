@@ -31,7 +31,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Download art
-        run: curl --silent https://github.com/argonautdev/public/releases/V0.6.3-alpha.10/download/art-linux -L -o art
+        run: curl --silent https://github.com/argonautdev/public/releases/v0.6.3-alpha.10/download/art-linux -L -o art
       - name: Fetch BuildTime Secrets
         run: |
           chmod +x ./art
