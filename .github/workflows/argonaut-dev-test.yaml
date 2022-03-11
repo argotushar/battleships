@@ -36,7 +36,7 @@ jobs:
         run: |
           chmod +x ./art
           sudo mv ./art /usr/local/bin/art
-          art configure --key 6f069312-f516-4a2f-b73f-45f7d2935266 --secret 86401c8d-e41a-4660-a2f2-dfcf00e3e98d
+          art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
           art app env-vars generate-config --app-name "test" --cluster-name "dev" --environment-name "dev" --environment-region "us-east-2" --type "buildtime"
           art app env-vars get -f "env-vars.yaml"
       - name: Build Image
