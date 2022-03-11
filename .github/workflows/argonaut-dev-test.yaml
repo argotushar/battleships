@@ -69,7 +69,7 @@ jobs:
   deploy:
     env:
       ART_FRONTEGG_SERVER: argonaut-pp.frontegg.com
-      ART_MIDGARD_SERVER: midgard.pp.argonaut.live/api/v1
+      ART_MIDGARD_SERVER: midgard.pp.argonaut.live
     environment: 
       name: dev 
     
