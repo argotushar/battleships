@@ -6,7 +6,7 @@ imageTag: "latest"
 
 
 services:
-  - port: 80
+  - port: 77
     protocol: "tls-terminated" # tls-passthrough, tls-terminated, tcp, http, grpc need to be supported
     external:
       hosts:
@@ -42,7 +42,7 @@ resources:
 livenessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 77
   
   # exec:
   #   command:
@@ -60,7 +60,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 77
   
   # # Handler 2
   # exec:
