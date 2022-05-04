@@ -9,7 +9,9 @@ on:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
   workflow_dispatch:
 
-
+env:
+  ART_MIDGARD_SERVER: midgard.pp.argonaut.live
+  ART_FRONTEGG_SERVER: argonaut-pp.frontegg.com
 
 jobs:
   build:
