@@ -1,7 +1,7 @@
 ---
 version: "v1"
 appName: "bs-tushar" 
-image: "170982004044.dkr.ecr.us-east-1.amazonaws.com/argonaut/bs-tushar"
+image: "170982004044.dkr.ecr.us-east-2.amazonaws.com/argonaut/bs-tushar"
 imageTag: "latest"
 
 
@@ -11,14 +11,13 @@ services:
     external:
       hosts:
         - "bs-tushar.pp.argonaut.live"
-        - "bs-tushar-pctest.pp.argonaut.live"
       hostPort: 443
       paths: ["/"]
 
 argonaut:
-  env: pctest2
-  region: us-east-1
-  cluster: pctest2
+  env: dev
+  region: us-east-2
+  cluster: dev
   imageRegistry: ecr # corresponding to the image that is to be deployed
   serviceType: "stateless" # One of {stateful, stateless, managed}
   repoName: battleships
