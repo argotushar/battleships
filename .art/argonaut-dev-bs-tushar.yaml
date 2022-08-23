@@ -5,15 +5,6 @@ image: "170982004044.dkr.ecr.us-east-2.amazonaws.com/argonaut/bs-tushar"
 imageTag: "latest"
 
 
-services:
-  - port: 80
-    protocol: "tls-terminated" # tls-passthrough, tls-terminated, tcp, http, grpc need to be supported
-    external:
-      hosts:
-        - "bs-tushar.pp.argonaut.live"
-      hostPort: 443
-      paths: ["/"]
-
 argonaut:
   env: dev
   region: us-east-2

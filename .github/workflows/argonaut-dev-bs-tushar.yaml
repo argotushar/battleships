@@ -1,5 +1,5 @@
 
-name: "Build and Push to CR"
+name: "Build bs-tushar:dev and Push to CR"
 
 on:
   push:
@@ -10,8 +10,9 @@ on:
   workflow_dispatch:
 
 env:
-  ART_MIDGARD_SERVER: midgard.pp.argonaut.live
+  ART_MIDGARD_SERVER: midgard-1.pp.argonaut.live
   ART_FRONTEGG_SERVER: argonaut-pp.frontegg.com
+
 
 jobs:
   build:
@@ -76,7 +77,7 @@ jobs:
           echo "AWS_REGION=$(cat credentials.json | jq --raw-output '.region')" >> $GITHUB_ENV
 
       - name: Push to ecr
-        uses: argonautdev/aws-ecr-action@v4.1
+        uses: argonautdev/aws-ecr-action@v4.1.1
         id: push_to_ecr
         with:
           access_key_id: ${{ env.AWS_ACCESS_KEY_ID }}
