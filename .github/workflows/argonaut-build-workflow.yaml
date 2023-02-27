@@ -1,0 +1,43 @@
+run-name: "argoanut build workflow : ${{inputs.task_name}}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        required: true
+        type: string
+        description: build-id
+      task_name:
+        required: true
+        type: string
+        description: task description
+      ref:
+        required: true
+        type: string
+        description: user repo ref to be used for task
+      arg_auth_token:
+        required: true
+        type: string
+        description: argonaut temporary auth token
+      extra_vars:
+        required: false
+        type: string
+        description: field for passing extra info, reserved for future
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Execute Task
+    steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Execute Argonaut task
+        uses: argonautdev/argonaut-action@main
+        id: argo-task
+        with:
+          task-id: ${{ inputs.task_id }}
+          task-name: ${{ inputs.task_name }}
+          ref: ${{ inputs.ref }}
+          arg-auth-token: ${{ inputs.arg_auth_token }}
+          extra-args: ${{ inputs.extra_vars }}
